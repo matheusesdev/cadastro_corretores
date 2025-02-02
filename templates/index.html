@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-br" spellcheck="false">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Corretores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Cadastro de Corretores</h2>
+        
+        <form id="corretorForm" action="{{ url_for('add_corretor') }}" method="post" class="mb-4">
+            <input type="hidden" name="id" id="corretorId">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>CPF</label>
+                    <input type="text" name="cpf" id="cpf" class="form-control" required>
+                </div>
+                <div class="col-md-8">
+                    <label>Nome Completo</label>
+                    <input type="text" name="nome_completo" id="nome_completo" class="form-control" required>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label>Data de Nascimento</label>
+                    <input type="date" name="data_nascimento" id="data_nascimento" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label>Imobiliária</label>
+                    <input type="text" name="imobiliaria" id="imobiliaria" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label>CRECI</label>
+                    <input type="text" name="creci" id="creci" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Estado CRECI</label>
+                    <input type="text" name="estado_creci" id="estado_creci" class="form-control" required>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <label>Telefone</label>
+                    <input type="text" name="telefone" id="telefone" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" class="form-control" required>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label>CEP</label>
+                    <input type="text" name="cep" id="cep" class="form-control" required onblur="buscarEndereco()">
+                </div>
+                <div class="col-md-8">
+                    <label>Logradouro</label>
+                    <input type="text" name="logradouro" id="logradouro" class="form-control" required>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label>Bairro</label>
+                    <input type="text" name="bairro" id="bairro" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label>Cidade</label>
+                    <input type="text" name="cidade" id="cidade" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Estado</label>
+                    <input type="text" name="estado" id="estado" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Número</label>
+                    <input type="text" name="numero" id="numero" class="form-control" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Adicionar Corretor</button>
+            <button type="button" class="btn btn-success mt-3" id="salvarAlteracoes" style="display: none;" onclick="salvarAlteracoes()">Salvar Alterações</button>
+        </form>
+
+        <div id="confirmationMessage" class="alert alert-success mt-3" style="display: none;">
+            Corretor cadastrado com sucesso!
+        </div>
+        <div id="editConfirmationMessage" class="alert alert-success mt-3" style="display: none;">
+            Alterações salvas com sucesso!
+        </div>
+
+        <h3>Corretores Cadastrados</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>CPF</th>
+                    <th>Nome</th>
+                    <th>Data de Nascimento</th>
+                    <th>Imobiliária</th>
+                    <th>CRECI</th>
+                    <th>Estado CRECI</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>CEP</th>
+                    <th>Logradouro</th>
+                    <th>Bairro</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Número</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="corretoresTable">
+                {% for corretor in corretores %}
+                <tr>
+                    <td>{{ corretor.cpf }}</td>
+                    <td>{{ corretor.nome_completo }}</td>
+                    <td>{{ corretor.data_nascimento }}</td>
+                    <td>{{ corretor.imobiliaria }}</td>
+                    <td>{{ corretor.creci }}</td>
+                    <td>{{ corretor.estado_creci }}</td>
+                    <td>{{ corretor.telefone }}</td>
+                    <td>{{ corretor.email }}</td>
+                    <td>{{ corretor.cep }}</td>
+                    <td>{{ corretor.logradouro }}</td>
+                    <td>{{ corretor.bairro }}</td>
+                    <td>{{ corretor.cidade }}</td>
+                    <td>{{ corretor.estado }}</td>
+                    <td>{{ corretor.numero }}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editarCorretor('{{ corretor.id }}')">Editar</button>
+                        <button class="btn btn-danger btn-sm" onclick="deletarCorretor('{{ corretor.id }}')">Deletar</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <form action="{{ url_for('enviar_corretores') }}" method="post">
+            <button type="submit" class="btn btn-success mt-3">Enviar Corretores</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
