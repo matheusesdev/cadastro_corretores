@@ -1,14 +1,24 @@
-# Ignore database files
-*corretores.db
+# Ignorar arquivos de banco de dados
+corretores.db
 
-# Ignore virtual environment directory
+# Ignorar diretório do ambiente virtual
 venv/
 
-# Ignore Python cache files
+# Ignorar arquivos de cache do Python
 __pycache__/
 *.pyc
 *.pyo
 
-# Ignore IDE configuration files
+# Ignorar arquivos de configuração do IDE
 .vscode/
 .idea/
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de configuração do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos de configuração de ambiente
+.env
